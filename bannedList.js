@@ -1055,23 +1055,25 @@ s.reqdPrefixes('Save (more than|over|up to) \\S+ lives( a year)?',  'Could','May
 
 ////////////////////////////////////////////////////////////////////////////////
 
+var blLink = '<http://bit.ly/bannedList|#BannedList>'
+
 exports.coreTerms = [
   new s.TermSet({terms: theIgnoreTerms}),
   new s.TermSet({terms: theIgnoredNotJustWordTerms, ignoreWordBoundaries:true}),
-  new s.TermSet({terms: theCaseSensitiveCoreTerms, title:'#BannedList entry', caseInsensitive:false}),
-  new s.TermSet({terms: theNotJustWordsTerms, ignoreWordBoundaries:true, title:'#BannedList entry'}),
-  new s.TermSet({terms: theCaseSensitiveNotJustWordsTerms, caseInsensitive:false, ignoreWordBoundaries:true, title:'#BannedList entry'}),
-  new s.TermSet({terms: theManagementSpeakTerms, title:'#BannedList Management Speak'}),
-  new s.TermSet({terms: theEducationSpeakTerms, title:'#BannedList Education Speak'}),
-  new s.TermSet({terms: theCoreTerms, title:'#BannedList entry'})
+  new s.TermSet({terms: theCaseSensitiveCoreTerms, title: blLink, caseInsensitive:false}),
+  new s.TermSet({terms: theNotJustWordsTerms, ignoreWordBoundaries:true, title: blLink}),
+  new s.TermSet({terms: theCaseSensitiveNotJustWordsTerms, caseInsensitive:false, ignoreWordBoundaries:true, title: blLink}),
+  new s.TermSet({terms: theManagementSpeakTerms, title: blLink + ' of Management Speak'}),
+  new s.TermSet({terms: theEducationSpeakTerms, title: blLink + ' of Education Speak'}),
+  new s.TermSet({terms: theCoreTerms, title: blLink})
 ];
 
 exports.extraTerms = [
-  new s.TermSet({terms: theExtraTerms, title:'#BannedList Extras: dodgy political language'}),
-  new s.TermSet({terms: theExtraShutUpTerms, title:'#BannedList Extras: "Boo" terms'}),
-  new s.TermSet({terms: theExtraHoorayTerms, title:'#BannedList Extras: "Hooray" terms'}),
-  new s.TermSet({terms: theExtraWeaselTerms, title:'#BannedList Extras: weasel terms'}),
-  new s.TermSet({terms: theSociologyTerms, title:'#BannedList Extras: dodgy sociological terms'}),
-  new s.TermSet({terms: theExtraHealthTerms, title:'#BannedList Extras: dodgy Health language'}),
-  new s.TermSet({terms: theCaseSensitiveExtraTerms, title:'#BannedList Extras: dodgy political language', caseInsensitive:false})
+  new s.TermSet({terms: theExtraTerms, title: blLink + ' of dodgy political language'}),
+  new s.TermSet({terms: theExtraShutUpTerms, title:'<http://bit.ly/bannedList|#BannedList> of "Boo" terms'}),
+  new s.TermSet({terms: theExtraHoorayTerms, title: blLink + ' of "Hooray" terms'}),
+  new s.TermSet({terms: theExtraWeaselTerms, title: blLink + ' of weasel terms'}),
+  new s.TermSet({terms: theSociologyTerms, title: blLink + ' of dodgy sociological terms'}),
+  new s.TermSet({terms: theExtraHealthTerms, title: blLink + ' of dodgy Health language'}),
+  new s.TermSet({terms: theCaseSensitiveExtraTerms, title: blLink + ' of dodgy political language', caseInsensitive:false})
 ];

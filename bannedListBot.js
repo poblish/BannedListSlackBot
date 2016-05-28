@@ -14,16 +14,11 @@ exports.handler = function(event, context) {
       // console.log('Hello');
   });
 
-  bot.on('open', function() {
-      // console.log('Ready!');
-  });
-
   bot.on('close', function() {
       // console.log('Closed');
   });
 
-  bot.on('message', function(data) {
-    // all ingoing events https://api.slack.com/rtm
+  bot.on('message', function(data) {  // all ingoing events https://api.slack.com/rtm
     // console.log('--- msg:', data);
 
     if (data.type != 'message' /* FIXME Comment out for testing: || data.subtype == 'bot_message' */) {
@@ -37,48 +32,35 @@ exports.handler = function(event, context) {
 
     console.log('--- Text:', data.text);
 
-    foundOne = false;
-
-    var params = {
-      icon_emoji: ':crying_cat_face:'
-    };
-
-    // console.log('Loaded rules', rules)
-    for (var i = 0; i < rules.coreTerms.length; i++) {
-      // console.log('>> ct = ', rules.coreTerms[i].regex);
-
-      var found = rules.coreTerms[i].getRegex().test(data.text);
-      // console.log('> pos = ' + pos, 'for', rules.coreTerms[i].getTitle());
-      if (found) { // .* matching "" causes infinite loop
-        console.log('FOUND Core ', rules.coreTerms[i].getTitle());
-        bot.postMessageToChannel('general', data.text + ' was ' + rules.coreTerms[i].getTitle() /*+ ' @ ' + new Date().toISOString() */, params);
-        foundOne = true
-        break;
-      }
-    }
-
-    if (foundOne) {
+    if (findMatchAmongTerms(data.text, rules.coreTerms, '')) {
       return
     }
 
-    for (var i = 0; i < rules.extraTerms.length; i++) {
-      // console.log('> ', rules.extraTerms[i].getRegex);
-      var found = rules.extraTerms[i].getRegex().test(data.text);
-      if (found) { // .* matching "" causes infinite loop
-        console.log('FOUND Extra ', rules.extraTerms[i].getTitle());
-        bot.postMessageToChannel('general', data.text + ' was ' + rules.extraTerms[i].getTitle() /*+ ' @ ' /+ new Date().toISOString() */, params);
-        foundOne = true
-        break;
-      }
-    }
-
-    // more information about additional params https://api.slack.com/methods/chat.postMessage
-    // var params = {
-    //     icon_emoji: ':cat:'
-    // };
-    //
-    // // define channel, where bot exist. You can adjust it there https://my.slack.com/services
-    // console.log('Posting...')
-    // bot.postMessageToChannel('general', 'meow: ' + new Date().toISOString(), params);
+    findMatchAmongTerms(data.text, rules.extraTerms, ' extra ')
   });
+}
+
+function findMatchAmongTerms(incomingString, terms, termsName) {
+  var params = {  // https://api.slack.com/methods/chat.postMessage
+    icon_emoji: ':crying_cat_face:'
+  };
+
+  for (var i = 0; i < terms.length; i++) {
+    // console.log('>> ct = ', rules.coreTerms[i].regex);
+
+    var found = terms[i].getRegex().test(incomingString);
+    // console.log('> pos = ' + pos, 'for', rules.coreTerms[i].getTitle());
+    if (found) { // .* matching "" causes infinite loop
+      var title = terms[i].getTitle()
+      if (title === '') {
+        console.log('IGNORE ' + termsName + ' match')
+        return true
+      }
+
+      console.log('FOUND ' + termsName + ' ' + title);
+      bot.postMessageToChannel('general', 'I\'m afraid that _"' + incomingString + '"_ is on the ' + termsName + title /*+ ' @ ' + new Date().toISOString() */, params);
+      return true
+    }
+  }
+  return false // Not found
 }
