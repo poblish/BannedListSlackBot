@@ -10,14 +10,6 @@ var bot = new SlackBot({
 exports.inst = bot
 
 exports.handler = function(event, context) {
-  bot.on('start', function() {
-      // console.log('Hello');
-  });
-
-  bot.on('close', function() {
-      // console.log('Closed');
-  });
-
   bot.on('message', function(data) {  // all ingoing events https://api.slack.com/rtm
     // console.log('--- msg:', data);
 
@@ -30,7 +22,7 @@ exports.handler = function(event, context) {
       return
     }
 
-    console.log('--- Text:', data.text);
+    // console.log('--- Text:', data.text);
 
     if (findMatchAmongTerms(data.text, rules.coreTerms, '')) {
       return
@@ -53,11 +45,11 @@ function findMatchAmongTerms(incomingString, terms, termsName) {
     if (found) { // .* matching "" causes infinite loop
       var title = terms[i].getTitle()
       if (title === '') {
-        console.log('IGNORE ' + termsName + ' match')
+        // console.log('IGNORE ' + termsName + ' match')
         return true
       }
 
-      console.log('FOUND ' + termsName + ' ' + title);
+      // console.log('FOUND ' + termsName + ' ' + title);
       bot.postMessageToChannel('general', 'I\'m afraid that _"' + incomingString + '"_ is on the ' + termsName + title /*+ ' @ ' + new Date().toISOString() */, params);
       return true
     }
