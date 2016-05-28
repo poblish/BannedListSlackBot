@@ -2,8 +2,7 @@
 function Foo(inAttrs) {
   var theJoined = '(' + inAttrs.terms.join('|') + ')';
   this.regex = new RegExp( inAttrs.ignoreWordBoundaries ? theJoined : ('\\b' + theJoined + '\\b'), ( inAttrs.caseInsensitive == null || inAttrs.caseInsensitive) ? "i" : "");
-  this.className = inAttrs.className;
-  this.title = inAttrs.title;
+  this.title = inAttrs.title || '';
 }
 
 Foo.prototype.getRegex = function() {
@@ -35,15 +34,6 @@ function replaceAll(string,text,by) {  // http://www.irt.org/script/771.htm
         newstr += replaceAll(string.substring(i+txtLength,strLength),text,by);
 
     return newstr;
-}
-
-var g_JunkFallacyPrefix = /^[\s\.,;:][\s\.,;:]*/;
-var g_JunkFallacySuffix = /[\s\.,;:][\s\.,;:]*$/;
-
-function trimFallacyString( inStr, inMaxLength) {
-    // So, cut to leave reasonable slop, then trim. If some slop left, cut to right size and re-trim right-hand side.
-    var firstTrim = inStr.slice(0, inMaxLength + 100).replace( g_JunkFallacyPrefix, '').replace( g_JunkFallacySuffix, '');
-    return firstTrim.slice(0,inMaxLength).replace( g_JunkFallacySuffix, '');
 }
 
 exports.optPrefixes = function() {

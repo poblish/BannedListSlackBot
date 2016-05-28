@@ -1056,22 +1056,22 @@ s.reqdPrefixes('Save (more than|over|up to) \\S+ lives( a year)?',  'Could','May
 ////////////////////////////////////////////////////////////////////////////////
 
 exports.coreTerms = [
-    new s.TermSet({terms: theIgnoreTerms, className:'highlightIgnore', title:''}),
-    new s.TermSet({terms: theIgnoredNotJustWordTerms, ignoreWordBoundaries:true, className:'highlightIgnore', title:''}),
-    new s.TermSet({terms: theCaseSensitiveCoreTerms, className:'highlightCore', title:'#BannedList entry', caseInsensitive:false}),
-    new s.TermSet({terms: theNotJustWordsTerms, ignoreWordBoundaries:true, className:'highlightCore', title:'#BannedList entry'}),
-    new s.TermSet({terms: theCaseSensitiveNotJustWordsTerms, caseInsensitive:false, ignoreWordBoundaries:true, className:'highlightCore', title:'#BannedList entry'}),
-    new s.TermSet({terms: theManagementSpeakTerms, className:'highlightMgmt', title:'#BannedList Management Speak'}),
-    new s.TermSet({terms: theEducationSpeakTerms, className:'highlightMgmt', title:'#BannedList Education Speak'}),
-    new s.TermSet({terms: theCoreTerms, className:'highlightCore', title:'#BannedList entry'})
+    new s.TermSet({terms: theIgnoreTerms}),
+    new s.TermSet({terms: theIgnoredNotJustWordTerms, ignoreWordBoundaries:true}),
+    new s.TermSet({terms: theCaseSensitiveCoreTerms, title:'#BannedList entry', caseInsensitive:false}),
+    new s.TermSet({terms: theNotJustWordsTerms, ignoreWordBoundaries:true, title:'#BannedList entry'}),
+    new s.TermSet({terms: theCaseSensitiveNotJustWordsTerms, caseInsensitive:false, ignoreWordBoundaries:true, title:'#BannedList entry'}),
+    new s.TermSet({terms: theManagementSpeakTerms, title:'#BannedList Management Speak'}),
+    new s.TermSet({terms: theEducationSpeakTerms, title:'#BannedList Education Speak'}),
+    new s.TermSet({terms: theCoreTerms, title:'#BannedList entry'})
 ];
 
 exports.extraTerms = [
-    new s.TermSet({terms: theExtraTerms, className:'highlightExtra', title:'#BannedList Extras: dodgy political language'}),
-    new s.TermSet({terms: theExtraShutUpTerms, className:'highlightShutUp', title:'#BannedList Extras: "Boo" terms'}),
-    new s.TermSet({terms: theExtraHoorayTerms, className:'highlightHooray', title:'#BannedList Extras: "Hooray" terms'}),
-    new s.TermSet({terms: theExtraWeaselTerms, className:'highlightExtra', title:'#BannedList Extras: weasel terms'}),
-    new s.TermSet({terms: theSociologyTerms, className:'highlightExtra', title:'#BannedList Extras: dodgy sociological terms'}),
-    new s.TermSet({terms: theExtraHealthTerms, className:'highlightExtra', title:'#BannedList Extras: dodgy Health language'}),
-    new s.TermSet({terms: theCaseSensitiveExtraTerms, className:'highlightExtra', title:'#BannedList Extras: dodgy political language', caseInsensitive:false})
+    new s.TermSet({terms: theExtraTerms, title:'#BannedList Extras: dodgy political language'}),
+    new s.TermSet({terms: theExtraShutUpTerms, title:'#BannedList Extras: "Boo" terms'}),
+    new s.TermSet({terms: theExtraHoorayTerms, title:'#BannedList Extras: "Hooray" terms'}),
+    new s.TermSet({terms: theExtraWeaselTerms, title:'#BannedList Extras: weasel terms'}),
+    new s.TermSet({terms: theSociologyTerms, title:'#BannedList Extras: dodgy sociological terms'}),
+    new s.TermSet({terms: theExtraHealthTerms, title:'#BannedList Extras: dodgy Health language'}),
+    new s.TermSet({terms: theCaseSensitiveExtraTerms, title:'#BannedList Extras: dodgy political language', caseInsensitive:false})
 ];
