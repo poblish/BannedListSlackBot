@@ -13,23 +13,28 @@ exports.handler = function(event, context) {
   bot.on('message', function(data) {  // all ingoing events https://api.slack.com/rtm
     // console.log('--- msg:', data);
 
-    if (data.type != 'message' /* FIXME Comment out for testing: || data.subtype == 'bot_message' */) {
-      return
+    // FIXME Checks for data.subtype == 'bot_message'?
+    if (data.subtype === 'message_changed') {
+      handleText( data.message.text )
     }
-
-    if (/#BannedList/.exec(data.text)) {
-      // console.log('--- SKIP:', data.text);
-      return
+    else if (data.type == 'message') {
+      handleText( data.text )
     }
-
-    // console.log('--- Text:', data.text);
-
-    if (findMatchAmongTerms(data.text, rules.coreTerms, '')) {
-      return
-    }
-
-    findMatchAmongTerms(data.text, rules.extraTerms, ' extra ')
   });
+}
+
+function handleText(str) {
+  if (!str || /#BannedList/.exec(str)) {
+    return
+  }
+
+  // console.log('--- Text:', str);
+
+  if (findMatchAmongTerms(str, rules.coreTerms, '')) {
+    return
+  }
+
+  findMatchAmongTerms(str, rules.extraTerms, ' extra ')
 }
 
 function findMatchAmongTerms(incomingString, terms, termsName) {
@@ -38,10 +43,7 @@ function findMatchAmongTerms(incomingString, terms, termsName) {
   };
 
   for (var i = 0; i < terms.length; i++) {
-    // console.log('>> ct = ', rules.coreTerms[i].regex);
-
     var found = terms[i].getRegex().test(incomingString);
-    // console.log('> pos = ' + pos, 'for', rules.coreTerms[i].getTitle());
     if (found) { // .* matching "" causes infinite loop
       var title = terms[i].getTitle()
       if (title === '') {
@@ -49,8 +51,7 @@ function findMatchAmongTerms(incomingString, terms, termsName) {
         return true
       }
 
-      // console.log('FOUND ' + termsName + ' ' + title);
-      bot.postMessageToChannel('general', 'I\'m afraid that _"' + incomingString + '"_ is on the ' + termsName + title /*+ ' @ ' + new Date().toISOString() */, params);
+      bot.postMessageToChannel('general', 'I\'m afraid that _"' + incomingString + '"_ is on the ' + termsName + title, params);
       return true
     }
   }
