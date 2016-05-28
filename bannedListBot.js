@@ -15,29 +15,29 @@ exports.handler = function(event, context) {
 
     // FIXME Checks for data.subtype == 'bot_message'?
     if (data.subtype === 'message_changed') {
-      handleText( data.message.text )
+      handleText( data.channel, data.message.text)
     }
     else if (data.type == 'message') {
-      handleText( data.text )
+      handleText( data.channel, data.text)
     }
   });
 }
 
-function handleText(str) {
+function handleText(channelId, str) {
   if (!str || /#BannedList/.exec(str)) {
     return
   }
 
   // console.log('--- Text:', str);
 
-  if (findMatchAmongTerms(str, rules.coreTerms, '')) {
+  if (findMatchAmongTerms(channelId, str, rules.coreTerms, '')) {
     return
   }
 
-  findMatchAmongTerms(str, rules.extraTerms, ' extra ')
+  findMatchAmongTerms(channelId, str, rules.extraTerms, ' extra ')
 }
 
-function findMatchAmongTerms(incomingString, terms, termsName) {
+function findMatchAmongTerms(channelId, incomingString, terms, termsName) {
   var params = {  // https://api.slack.com/methods/chat.postMessage
     icon_emoji: ':crying_cat_face:'
   };
@@ -51,7 +51,7 @@ function findMatchAmongTerms(incomingString, terms, termsName) {
         return true
       }
 
-      bot.postMessageToChannel('general', 'I\'m afraid that _"' + incomingString + '"_ is on the ' + termsName + title, params);
+      bot.postMessage(channelId, 'I\'m afraid that _"' + incomingString + '"_ is on the ' + termsName + title, params);
       return true
     }
   }
