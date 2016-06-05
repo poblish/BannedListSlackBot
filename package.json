@@ -2,6 +2,9 @@
   "name": "BannedListSlackBot",
   "version": "0.0.1",
   "dependencies": {
-    "slackbots": "*"
+    "slackbots": "*",
+    "express": "*",
+    "@slack/client": "*",
+    "aws-sdk": "*"
   }
 }
