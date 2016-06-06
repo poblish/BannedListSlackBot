@@ -29,10 +29,10 @@ docClient.scan({TableName : process.env.awsDdbTableName}, function(err, data) {
         process.exit(1)
     }
 
-    // console.log("Query succeeded.");
+    var rows = 0;
     data.Items.forEach(function(item) {
-        // console.log(" -", item.access_token + ": " + item.title);
-        botTokens[ item.access_token ] = new BannedListBot( item.access_token ).start();
+        rows++;
+        validateToken(item.access_token, loadValidToken, loadBadToken);
     });
 
     // FIXME Only in test mode!  FIXME This needs to be done if DB bypassed too, with proper func!
@@ -40,8 +40,20 @@ docClient.scan({TableName : process.env.awsDdbTableName}, function(err, data) {
     //   botTokens[ process.env.slackToken ] = new BannedListBot(/* default */).start();
     // }
 
-    console.log("# Loaded " + Object.keys(botTokens).length + " botToken(s)");
+    console.log("# Loaded " + rows + " botToken(s)");
 });
+
+function loadValidToken(token) {
+  botTokens[token] = new BannedListBot(token).start();
+}
+
+function loadBadToken(token) {
+  docClient.delete({TableName : process.env.awsDdbTableName, Key: {access_token: token}}, function(err, data) {
+    if (err) {
+      console.log("ERROR Deleting token <" + token + ">");
+    }
+  });
+}
 
 /////////////////////////////////////////  Express setup
 
@@ -74,6 +86,18 @@ app.listen(port, function () {
 var WebClient = require('@slack/client').WebClient;
 var slackWebClient = new WebClient('');
 // handleSlackCode('45971131990.48205120515.3158b0e4fa');
+
+function validateToken(token, okHandler, failHandler) {
+  new WebClient(token).auth.test( function(data, apiResp) {
+    if (!apiResp.ok) {
+      console.warn("INVALIDATE and delete <" + token + "> due to '" + apiResp.error + "'");
+      failHandler(token);
+    }
+    else {
+      okHandler(token);
+    }
+  });
+}
 
 function handleSlackCode(slackCode) {
   slackWebClient.oauth.access( process.env.appClientId, process.env.appClientSecret, slackCode, null, function(err, apiResp) {
