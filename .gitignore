@@ -1,3 +1,4 @@
 env.js
 .bin/
 node_modules/
+zip.sh

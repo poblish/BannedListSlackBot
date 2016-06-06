@@ -1,2 +1,0 @@
-zip -rq ../bannedListBot.zip .
-
